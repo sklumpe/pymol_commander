@@ -15,14 +15,16 @@ commander=PymolCommander()
 
 commander.loadModel("test.pdb","pdb")
 
-stickcolors=["gray","yellow","red","white","orange"]
-chaincolors=["green","yellow","red","white","orange"]
+stickcolors=["gray","yellow","white","orange","black"]
+chaincolors=["green","yellow","white","orange","black"]
 
-commander.showModel("obj0",chaincolors,stickcolors)
-commander.zoom("obj0","chain c")
-sleep(1)
-commander.undoZoom()
-sleep(1)
+
+commander.read_PDBanalyzer("test.pdb", "test.out",stickcolors,chaincolors)
+#commander.showModel("obj0",chaincolors,stickcolors)
+#commander.zoom("obj0","chain c")
+#sleep(1)
+#commander.undoZoom()
+#sleep(1)
 
 
 
@@ -33,8 +35,8 @@ sleep(1)
 
 
 #commander.hideModel("obj0")
-commander.showSticks("obj0","chain c & resi 4","grey")
-commander.zoom("obj0","chain c & resi 4")
+#commander.showSticks("obj0","chain c & resi 4","grey")
+#commander.zoom("obj0","chain c & resi 4")
 #commander.showSticks("obj0","chain d & resi 96+97+98","white")
 #commander.showSticks("obj0","chain e & resi 96+50+29+97+98+99","orange")
 #commander.hideSticks("obj0","chain a")

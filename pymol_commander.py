@@ -58,8 +58,8 @@ class PymolCommander(Base):
 
 
     def showConnection(self, model, atom1, atom2, color):
-        name="connection"+str(self.connection_count)
-
+        #name="connection"+str(self.connection_count)
+        name=str(atom1.split("/")[1]) + "_" +str(atom1.split("/")[-1]) + "--" + str(atom2.split("/")[1])+"_"+str(atom2.split("/")[-1])
         self.connection_dictionary.update({(str(model)+str(atom1)+str(atom2)):(self.connection_count)})
         self.connection_count += 1
         cmd.do("distance "+str(name)+", /"+ str(model)+"//"+str(atom1)+", /"+ str(model)+"//"+str(atom2))
@@ -110,4 +110,40 @@ class PymolCommander(Base):
     def setFrame(self, model, n):
         #dont
         pass
+
+    def read_PDBanalyzer(self,filename,outname,stickColors,chainColors):
+        import re
+        contacts=[]
+#        stickcolors = ["gray", "yellow", "red", "white", "orange"]
+#        chaincolors = ["green", "yellow", "red", "white", "orange"]
+        with open(outname,"r") as contact_file:
+            contacts_lines=contact_file.readlines()
+            for line in contacts_lines:
+                contacts.append(line.split())
+        #print contacts
+        self.loadModel(filename,"pdb")
+        model="obj"+str(self.count-1)
+        self.showModel(model,chainColors,stickColors)
+        for i in contacts:
+            id1=re.findall(r'\d+', i[0])
+            id2=re.findall(r'\d+', i[2])
+            atom1=str(i[1])+"/"+i[0][0:3]+"`"+i[0][3:]+"/"+i[4]
+            atom2=str(i[3])+"/"+i[2][0:3]+"`"+i[2][3:]+"/"+i[5]
+            selection="chain "+str(i[1])+" & resi "+str(id1[0])+" + chain "+str(i[3])+" & resi "+str(id2[0])
+            cmd.set("label_position", "(1,1,1)")
+            try:
+                color=chainColors[contacts.index(i)]
+            except IndexError:
+                color = chainColors[-1]
+            self.showSticks(model,selection,"none")
+            if ("O" in i[4]) or ("N" in i[4]) or ("S" in i[4]):
+                if ("O" in i[5]) or ("N" in i[5]) or ("S" in i[5]):
+                    self.showConnection(model, atom1, atom2, "yellow")
+            else:
+                self.showConnection(model,atom1,atom2,"black")
+
+
+
+
+
 
