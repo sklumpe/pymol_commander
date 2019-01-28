@@ -1,0 +1,7 @@
+cmd.color("grey50","all")
+util.cnc("all")
+
+
+script mit input 2 chain ids + pdb
+output: Liste mit Kontakten
+Res1    Res2    Distance
